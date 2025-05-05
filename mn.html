@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chuva de Corações</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-image: url('bg.png');
+      background-size: cover;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      font-family: "Roboto", sans-serif;
+    }
+
+    .content {
+      z-index: 2;
+      text-align: center;
+    }
+
+    .logo img {
+      max-width: 200px;
+      margin-bottom: 20px;
+    }
+
+    .box {
+      background-color: #000000f7;
+      width: 100vh;
+      height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+      overflow-y: auto;
+      border-radius: 15px;
+      display: none;
+      opacity: 0;
+      transform: scale(0.8);
+      animation: fadeInBox 1s forwards; /* Animação de exibição da caixa */
+      box-shadow: 0px 0px 22px 1px #ff0000cc;
+    }
+
+    @keyframes fadeInBox {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .box p {
+      color: white;
+      font-size: 18px;
+      text-align: left;
+      margin: 5px 0;
+    }
+
+    .hearts {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .heart {
+      position: absolute;
+      top: -50px;
+      font-size: 30px;
+      animation: fall 3s infinite linear;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(100vh) scale(1); opacity: 0; }
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 20px;
+      background-color: white;
+      margin-left: 2px;
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Estilo do Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgb(0 0 0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      color: white;
+      font-size: 20px;
+      text-align: center;
+      opacity: 1;
+      transition: opacity 1s ease-out; /* Fade-out mais suave */
+    }
+
+
+    .modal.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .modal button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #272727;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    /* Estilo do botão de pausar música */
+    .pause-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #000;
+      color: white;
+      font-size: 18px;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 11px;
+      cursor: pointer;
+      z-index: 10000;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Modal de Aviso -->
+  <div id="modal" class="modal">
+    <div>
+      <p>tá pronta, gatinha?</p><br>
+      <button id="startButton">sim 🥰</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="logo">
+      <img src="coracao.png" alt="Logo"> <!-- Substitua com a URL da sua logo -->
+    </div>
+    <div class="box" id="box">
+      <!-- Linhas serão digitadas aqui -->
+    </div>
+  </div>
+
+  <div class="hearts"></div>
+
+  <!-- Botão de pausar a música -->
+  <button class="pause-button" id="pauseButton" style="display: none;">Pausar Música</button>
+
+  <script>
+    // Digitação linha por linha
+    const linhas = [
+      "e aí, minha doutora",
+      "resolvi criar isso aqui para te mostrar (pelo menos um pouco) do quanto eu te amo e sou louco por você, e como eu sempre vou querer fazer coisas por e pra você, para te ver feliz e toda bobinha. afinal, eu amo quando você sorri e fica envergonhada...",
+      "em 25 anos de vida, passei por muitas coisas, e aos 20 achei que já tinha conquistado tudo o que eu queria... e eu tinha, estava feliz assim, mas mal sabia eu que, 5 anos depois, iria te conhecer e iria te desejar e te amar do jeito que amo, que a minha ideia de ter conquistado 'tudo' seria motivo de piada, pois o tudo que eu quero agora é você.",
+      "eu sei, hoje você já é minha, minha mulher, minha princesa, minha vida, meu amor, minha doutora, meu TUDO. mas não é só porque você já é minha que eu parei de te desejar. muito pelo contrário, te desejo um pouco mais a cada dia.",
+      "estou disposto a te mostrar todos os dias que o amor é lindo, intenso e muito bom, e o nosso não será diferente. vou fazer sempre o possível para te deixar segura, para fazer você se soltar e se entregar cada vez mais, soltar essa 'menininha interior' (igual naquele vídeo que você me contou).",
+      "Nathália, eu vou lutar por você e por nós, vou cuidar e proteger você, continue colocando isso na sua cabeça... só não vou dizer novamente 'entenda que eu sou homem' porque a frase mudou, agora é: entenda que eu sou o SEU HOMEM.",
+      "eu te amo."
+    ];
+
+    const box = document.getElementById("box");
+
+    async function digitarLinha(texto, delay = 75) {
+      return new Promise(resolve => {
+        let i = 0;
+        const linha = document.createElement("p");
+        const spanTexto = document.createElement("span");
+        const cursor = document.createElement("span");
+        cursor.classList.add("cursor");
+
+        linha.appendChild(spanTexto);
+        linha.appendChild(cursor);
+        box.appendChild(linha);
+
+        const intervalo = setInterval(() => {
+          spanTexto.textContent += texto.charAt(i);
+          i++;
+          if (i === texto.length) {
+            clearInterval(intervalo);
+            linha.removeChild(cursor);
+            resolve();
+          }
+        }, delay);
+      });
+    }
+
+    async function digitarTudo() {
+      for (const linha of linhas) {
+        await digitarLinha(linha);
+      }
+    }
+
+    // Gerador de corações
+    function generateHearts() {
+      const heartContainer = document.querySelector('.hearts');
+      const numHearts = 50;
+      for (let i = 0; i < numHearts; i++) {
+        const heart = document.createElement('span');
+        heart.textContent = '❤️';
+        heart.classList.add('heart');
+        heart.style.left = `${Math.random() * 100}%`;
+        heart.style.animationDelay = `${Math.random() * 5}s`;
+        heart.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        heart.style.fontSize = `${Math.random() * 20 + 20}px`;
+        heartContainer.appendChild(heart);
+      }
+    }
+
+    window.onload = generateHearts;
+
+    // Música de fundo
+    const music = document.createElement('audio');
+    music.loop = true;
+    const source = document.createElement('source');
+    source.src = 'musica.mp3'; // Altere para o caminho correto do arquivo de música
+    source.type = 'audio/mpeg';
+    music.appendChild(source);
+    document.body.appendChild(music);
+
+    let musicStarted = false;
+
+    // Função para iniciar a música e ocultar o modal com fade-out
+    function startMusic() {
+      const modal = document.getElementById('modal');
+      modal.classList.add('fade-out'); // Aplica a animação de fade-out no modal
+      setTimeout(() => {
+        modal.style.display = 'none'; // Ocultar o modal após a animação de fade-out
+        music.play();
+        setTimeout(() => {
+          box.style.display = "block"; // Mostrar a box com o texto
+          box.style.animation = "fadeInBox 1s forwards"; // Animação da caixa
+          digitarTudo(); // Começar a digitar o texto
+        }, 500); // Atraso para a animação do fade-out
+      }, 500); // Duração do fade-out
+      document.getElementById('pauseButton').style.display = 'block'; // Mostrar o botão de pausar
+    }
+
+    // Iniciar música ao clicar no botão do modal
+    const startButton = document.getElementById('startButton');
+    startButton.addEventListener('click', startMusic);
+
+    // Função para pausar a música
+    const pauseButton = document.getElementById('pauseButton');
+    pauseButton.addEventListener('click', () => {
+      if (music.paused) {
+        music.play();
+        pauseButton.textContent = 'Pausar Música';
+      } else {
+        music.pause();
+        pauseButton.textContent = 'Continuar Música';
+      }
+    });
+  </script>
+</body>
+</html>

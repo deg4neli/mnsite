@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Surpresa 💖</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 100px);
+      grid-gap: 15px;
+      margin-bottom: 20px;
+      z-index: 1;
+    }
+
+    .block {
+      background-color: black;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+      font-size: 14px;
+      text-align: center;
+      border-radius: 8px;
+      user-select: none;
+    }
+
+    .block.clicked {
+      background-color: #ff69b4;
+      color: #000;
+    }
+
+    /* Modal & overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(6px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .modal {
+      background: #222;
+      padding: 40px;
+      border-radius: 12px;
+      text-align: center;
+      color: #ff69b4;
+      box-shadow: 0 0 15px #ff69b4;
+      animation: fadeIn 1s ease-in-out forwards;
+      opacity: 0;
+    }
+
+    .modal h1 {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+    .modal button {
+      margin-top: 20px;
+      background-color: #ff69b4;
+      color: #111;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .modal button:hover {
+      background-color: #ff85c1;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .hearts {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0; left: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 5;
+    }
+
+    .heart {
+      position: absolute;
+      color: #ff69b4;
+      animation: float 6s linear infinite;
+      font-size: 20px;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    a {
+      text-decoration: none;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="grid" id="grid"></div>
+  <div class="hearts" id="hearts"></div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h1>Não acabou...</h1>
+      <button><a href="mn.html">Continuar</a></button>
+    </div>
+  </div>
+
+  <script>
+    const texts = [
+      "Você", "é", "a", "minha", "escolha",
+      "hoje", "amanhã", "e", "todos", "os",
+      "dias", "que", "vierem", "eu", "sempre",
+      "cuidarei", "de", "você", "amor", "💖."
+    ];
+
+    const grid = document.getElementById("grid");
+    const modalOverlay = document.getElementById("modalOverlay");
+    const hearts = document.getElementById("hearts");
+
+    let clickedCount = 0;
+
+    for (let i = 0; i < 20; i++) {
+      const block = document.createElement("div");
+      block.classList.add("block");
+      block.dataset.index = i;
+      block.addEventListener("click", () => {
+        if (!block.classList.contains("clicked")) {
+          block.classList.add("clicked");
+          block.textContent = texts[i];
+          clickedCount++;
+          if (clickedCount === 20) {
+            launchHearts();
+            showModal();
+          }
+        }
+      });
+      grid.appendChild(block);
+    }
+
+    function showModal() {
+      modalOverlay.style.display = "flex";
+    }
+
+    function closeModal() {
+      modalOverlay.style.display = "none";
+    }
+
+    function launchHearts() {
+      for (let i = 0; i < 50; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+        heart.style.fontSize = (16 + Math.random() * 20) + "px";
+        heart.textContent = "💖";
+        hearts.appendChild(heart);
+        setTimeout(() => {
+          heart.remove();
+        }, 6000);
+      }
+    }
+  </script>
+</body>
+</html>
